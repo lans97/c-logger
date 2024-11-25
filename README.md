@@ -9,14 +9,16 @@ A fairly simple logger configurable at compile time.
 3. Use any `LOG_X` macro
 
 ### Example
-    #define LOG_LEVEL DEBUG
-    #include <logger.h>
+```C
+#define LOG_LEVEL DEBUG
+#include <logger.h>
 
-    int main(void) {
-        int x = 4;
-        LOG_DEBUG("Value of x: %d", x);
-        return 0;
-    }
+int main(void) {
+    int x = 4;
+    LOG_DEBUG("Value of x: %d", x);
+    return 0;
+}
+```
 
 Output:
 
