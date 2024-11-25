@@ -21,3 +21,7 @@ A fairly simple logger configurable at compile time.
 Output:
 
     2024-11-25 15:21:54 | DEBUG | main.c (6) | in function main: Value of x: 4
+
+## Thanks
+
+Do check [dmcrodrigues/macro-logger](https://github.com/dmcrodrigues/macro-logger)
