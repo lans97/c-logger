@@ -1,9 +1,22 @@
+/**
+ * @file logger.h
+ * @brief This file provides macros for logging messages
+ *
+ * Config:
+ * #define LOG_LEVEL NOTSET/TRACE/DEBUG/INFO/WARNING/ERROR/FATAL
+ *
+ * Usage:
+ * #include <logger.h>
+ * ...
+ * LOG_TRACE("Hello, world!\nHere's a number: %d", 4);
+ * ...
+ */
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <time.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
 
 #define NOTSET 0x00
 #define TRACE 0x01
@@ -32,57 +45,118 @@
 #define FILE_COLOR "\033[38;2;0;191;255m"
 #define FUNC_COLOR "\033[38;2;186;85;211m"
 
-#define TRACE_TAG TRACE_COLOR "TRACE" RST_COLOR
-#define DEBUG_TAG DEBUG_COLOR "DEBUG" RST_COLOR
-#define INFO_TAG INFO_COLOR "INFO" RST_COLOR
-#define WARNING_TAG WARNING_COLOR "WARNING" RST_COLOR
-#define ERROR_TAG ERROR_COLOR "ERROR" RST_COLOR
-#define FATAL_TAG FATAL_COLOR "FATAL" RST_COLOR
+#define TRACE_TAG "TRACE"
+#define DEBUG_TAG "DEBUG"
+#define INFO_TAG "INFO"
+#define WARNING_TAG "WARNING"
+#define ERROR_TAG "ERROR"
+#define FATAL_TAG "FATAL"
 
-#define LOG_FMT             "%s%s%s | %s%-7s%s | %s%s (%d)%s | in function %s%s%s: "
-#define LOG_ARGS(LEVEL)     TS_COLOR, get_timestamp(), RST_COLOR,\
-                            LEVEL##_COLOR, LEVEL##_TAG, RST_COLOR,\
-                            FILE_COLOR, _FILE, __LINE__, RST_COLOR,\
-                            FUNC_COLOR, __FUNCTION__, RST_COLOR
+/* Full log message format. Considers usage of ANSI color escape codes. */
+#define LOG_FMT "%s[%s]%s %s%-7s%s | %s%s (%4d)%s | in function %s%s%s: "
+/* Aruments to pass to LOG_PRINT macro using LOG_FMT. Includes ANSI color escape
+ * codes. */
+#define LOG_ARGS(LEVEL)                                                        \
+    TS_COLOR, get_timestamp(), RST_COLOR, LEVEL##_COLOR, LEVEL##_TAG,          \
+        RST_COLOR, FILE_COLOR, _FILE, __LINE__, RST_COLOR, FUNC_COLOR,         \
+        __FUNCTION__, RST_COLOR
 
-#define LOG_PRINT(format, ...) printf(format, __VA_ARGS__)
+/**
+ * @macro LOG_PRINT
+ * @brief Prints the log line with a given format
+ */
+#define LOG_PRINT(target, format, ...) fprintf(target, format, __VA_ARGS__)
 
+/**
+ * @macro LOG_TRACE
+ * @brief Logs trace message.
+ *
+ * @param msg Format string to log.
+ * @param args Values to print with msg as format.
+ */
 #if LOG_LEVEL <= TRACE
-#define LOG_TRACE(msg, args...) LOG_PRINT(LOG_FMT msg "\n", LOG_ARGS(TRACE), ## args)
+#define LOG_TRACE(msg, args...)                                                \
+    LOG_PRINT(stdout ,LOG_FMT msg "\n", LOG_ARGS(TRACE), ##args)
 #else
 #define LOG_TRACE(msg, args...)
 #endif
 
+/**
+ * @macro LOG_DEBUG
+ * @brief Logs debug message.
+ *
+ * @param msg Format string to log.
+ * @param args Values to print with msg as format.
+ */
 #if LOG_LEVEL <= DEBUG
-#define LOG_DEBUG(msg, args...) LOG_PRINT(LOG_FMT msg "\n", LOG_ARGS(DEBUG), ## args)
+#define LOG_DEBUG(msg, args...)                                                \
+    LOG_PRINT(stdout, LOG_FMT msg "\n", LOG_ARGS(DEBUG), ##args)
 #else
 #define LOG_DEBUG(msg, args...)
 #endif
 
+/**
+ * @macro LOG_INFO
+ * @brief Logs informational message.
+ *
+ * @param msg Format string to log.
+ * @param args Values to print with msg as format.
+ */
 #if LOG_LEVEL <= INFO
-#define LOG_INFO(msg, args...) LOG_PRINT(LOG_FMT msg "\n", LOG_ARGS(INFO), ## args)
+#define LOG_INFO(msg, args...)                                                 \
+    LOG_PRINT(stdout, LOG_FMT msg "\n", LOG_ARGS(INFO), ##args)
 #else
 #define LOG_INFO(msg, args...)
 #endif
 
+/**
+ * @macro LOG_WARNING
+ * @brief Logs warning message.
+ *
+ * @param msg Format string to log.
+ * @param args Values to print with msg as format.
+ */
 #if LOG_LEVEL <= WARNING
-#define LOG_WARNING(msg, args...) LOG_PRINT(LOG_FMT msg "\n", LOG_ARGS(WARNING), ## args)
+#define LOG_WARNING(msg, args...)                                              \
+    LOG_PRINT(stdout, LOG_FMT msg "\n", LOG_ARGS(WARNING), ##args)
 #else
 #define LOG_WARNING(msg, args...)
 #endif
 
+/**
+ * @macro LOG_ERROR
+ * @brief Logs error message.
+ *
+ * @param msg Format string to log.
+ * @param args Values to print with msg as format.
+ */
 #if LOG_LEVEL <= ERROR
-#define LOG_ERROR(msg, args...) LOG_PRINT(LOG_FMT msg "\n", LOG_ARGS(ERROR), ## args)
+#define LOG_ERROR(msg, args...)                                                \
+    LOG_PRINT(stderr, LOG_FMT msg "\n", LOG_ARGS(ERROR), ##args)
 #else
 #define LOG_ERROR(msg, args...)
 #endif
 
+/**
+ * @macro LOG_FATAL
+ * @brief Logs fatal error message.
+ *
+ * @param msg Format string to log.
+ * @param args Values to print with msg as format.
+ */
 #if LOG_LEVEL <= FATAL
-#define LOG_FATAL(msg, args...) LOG_PRINT(LOG_FMT msg "\n", LOG_ARGS(FATAL), ## args)
+#define LOG_FATAL(msg, args...)                                                \
+    LOG_PRINT(stderr, LOG_FMT msg "\n", LOG_ARGS(FATAL), ##args)
 #else
 #define LOG_FATAL(msg, args...)
 #endif
 
+/**
+ * @fn get_timestamp
+ * @brief Used by logger to get build timestamp string.
+ *
+ * @return timestamp with format "%Y-%m-%d %H:%M:%S".
+ */
 static inline char* get_timestamp() {
     static char buffer[64];
     time_t rawtime;
