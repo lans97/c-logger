@@ -9,8 +9,8 @@ project(
 
 file(GLOB_RECURSE sources src/*.c src/*.h)
 
-add_executable(${PROJECT_NAME} ${sources})
+add_executable(main ${sources})
 
-target_compile_features(${PROJECT_NAME} PRIVATE c_std_23)
+target_compile_features(main PRIVATE c_std_23)
 
-target_include_directories(${PROJECT_NAME} PUBLIC src)
+target_include_directories(main PUBLIC src)
