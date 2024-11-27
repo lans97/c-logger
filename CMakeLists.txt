@@ -10,7 +10,6 @@ project(
 add_library(logger INTERFACE)
 target_include_directories(logger INTERFACE src/include)
 
-# add_executable(sample ${sources})
-# target_link_libraries(samlpe PUBLIC logger)
-# target_include_directories()
-# target_compile_features(main PRIVATE c_std_23)
+add_executable(example src/example/example.c)
+target_link_libraries(example PRIVATE logger)
+target_include_directories(example PRIVATE src/)
