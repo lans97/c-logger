@@ -7,10 +7,10 @@ project(
     VERSION 1.0
     LANGUAGES C)
 
-file(GLOB_RECURSE sources src/*.c src/*.h)
+add_library(logger INTERFACE)
+target_include_directories(logger INTERFACE src/include)
 
-add_executable(main ${sources})
-
-target_compile_features(main PRIVATE c_std_23)
-
-target_include_directories(main PUBLIC src)
+# add_executable(sample ${sources})
+# target_link_libraries(samlpe PUBLIC logger)
+# target_include_directories()
+# target_compile_features(main PRIVATE c_std_23)
