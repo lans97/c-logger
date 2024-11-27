@@ -8,7 +8,7 @@ project(
     LANGUAGES C)
 
 add_library(logger INTERFACE)
-target_include_directories(logger INTERFACE src/include)
+target_include_directories(logger INTERFACE src/)
 
 option(BUILD_EXAMPLES "Build the examples" OFF)
 
