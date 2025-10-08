@@ -7,8 +7,8 @@ project(
     VERSION 1.0
     LANGUAGES C)
 
-add_library(logger INTERFACE src/logger.h)
-target_include_directories(logger INTERFACE src/)
+add_library(logger INTERFACE include/logger.h)
+target_include_directories(logger INTERFACE include/)
 
 # Expose include directory (for FetchContent)
 target_include_directories(logger INTERFACE
