@@ -11,8 +11,7 @@ add_library(logger INTERFACE src/logger.h)
 target_include_directories(logger INTERFACE src/)
 
 # Expose include directory (for FetchContent)
-target_include_directories(logger
-    PUBLIC
+target_include_directories(logger INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>
 )
